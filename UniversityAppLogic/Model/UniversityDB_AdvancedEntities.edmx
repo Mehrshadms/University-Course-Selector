@@ -1,0 +1,635 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="UniversityDB_AdvancedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="Course_ID" />
+          </Key>
+          <Property Name="Course_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Course_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Practical_Hours" Type="int" />
+          <Property Name="Theory_Hours" Type="int" />
+          <Property Name="Total_Hours" Type="int" Nullable="false" />
+          <Property Name="FK_Major_ID" Type="int" Nullable="false" />
+          <Property Name="Practical_Units" Type="int" />
+          <Property Name="Theory_Units" Type="int" />
+          <Property Name="Total_Units" Type="int" Nullable="false" />
+          <Property Name="FK_Prerequisite" Type="int" />
+        </EntityType>
+        <EntityType Name="CoursesTime">
+          <Key>
+            <PropertyRef Name="CourseTime_ID" />
+          </Key>
+          <Property Name="CourseTime_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_Course_ID" Type="int" Nullable="false" />
+          <Property Name="CourseDay" Type="int" Nullable="false" />
+          <Property Name="Start_Hour" Type="int" Nullable="false" />
+          <Property Name="End_Hour" Type="int" Nullable="false" />
+          <Property Name="FK_Term_ID" Type="int" Nullable="false" />
+          <Property Name="FK_Teacher_ID" Type="int" Nullable="false" />
+          <Property Name="FK_Major_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Groups">
+          <Key>
+            <PropertyRef Name="Group_ID" />
+          </Key>
+          <Property Name="Group_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Group_Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Levels">
+          <Key>
+            <PropertyRef Name="Level_ID" />
+          </Key>
+          <Property Name="Level_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Level_Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Majors">
+          <Key>
+            <PropertyRef Name="Major_ID" />
+          </Key>
+          <Property Name="Major_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Major_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FK_Level_ID" Type="int" Nullable="false" />
+          <Property Name="FK_Group_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="Teacher_Id" />
+          </Key>
+          <Property Name="Teacher_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Teacher_FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Teacher_LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FK_Teacher_Degree_ID" Type="int" Nullable="false" />
+          <Property Name="FK_Teacher_Group_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teacher_Degree">
+          <Key>
+            <PropertyRef Name="Degree_ID" />
+          </Key>
+          <Property Name="Degree_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Degree_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Term">
+          <Key>
+            <PropertyRef Name="Term_ID" />
+          </Key>
+          <Property Name="Term_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Term_Name" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Courses_Courses_Majors">
+          <End Role="Majors" Type="Self.Majors" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Majors">
+              <PropertyRef Name="Major_ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="FK_Major_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Courses_Courses_Prerequisite">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
+          <End Role="Courses1" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_ID" />
+            </Principal>
+            <Dependent Role="Courses1">
+              <PropertyRef Name="FK_Prerequisite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Course_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Teacher_Id" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Teacher_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Term">
+          <End Role="Term" Type="Self.Term" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Term">
+              <PropertyRef Name="Term_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Term_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_Majors">
+          <End Role="Majors" Type="Self.Majors" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Majors">
+              <PropertyRef Name="Major_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Major_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Majors_Majors_Group">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Majors" Type="Self.Majors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="Group_ID" />
+            </Principal>
+            <Dependent Role="Majors">
+              <PropertyRef Name="FK_Group_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Majors_Majors_Level">
+          <End Role="Levels" Type="Self.Levels" Multiplicity="1" />
+          <End Role="Majors" Type="Self.Majors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Levels">
+              <PropertyRef Name="Level_ID" />
+            </Principal>
+            <Dependent Role="Majors">
+              <PropertyRef Name="FK_Level_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_Teacher_Degree">
+          <End Role="Teacher_Degree" Type="Self.Teacher_Degree" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher_Degree">
+              <PropertyRef Name="Degree_ID" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="FK_Teacher_Degree_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_Teacher_Group">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="Group_ID" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="FK_Teacher_Group_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UniversityDB_AdvancedModelStoreContainer">
+          <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CoursesTime" EntityType="Self.CoursesTime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Groups" EntityType="Self.Groups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Levels" EntityType="Self.Levels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Majors" EntityType="Self.Majors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher_Degree" EntityType="Self.Teacher_Degree" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Term" EntityType="Self.Term" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Courses_Courses_Majors" Association="Self.FK_Courses_Courses_Majors">
+            <End Role="Majors" EntitySet="Majors" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Courses_Courses_Prerequisite" Association="Self.FK_Courses_Courses_Prerequisite">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Courses1" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Courses" Association="Self.FK_CoursesTime_CoursesTime_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Teacher" Association="Self.FK_CoursesTime_CoursesTime_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Term" Association="Self.FK_CoursesTime_CoursesTime_Term">
+            <End Role="Term" EntitySet="Term" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_Majors" Association="Self.FK_CoursesTime_Majors">
+            <End Role="Majors" EntitySet="Majors" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Majors_Majors_Group" Association="Self.FK_Majors_Majors_Group">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Majors" EntitySet="Majors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Majors_Majors_Level" Association="Self.FK_Majors_Majors_Level">
+            <End Role="Levels" EntitySet="Levels" />
+            <End Role="Majors" EntitySet="Majors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_Teacher_Degree" Association="Self.FK_Teacher_Teacher_Degree">
+            <End Role="Teacher_Degree" EntitySet="Teacher_Degree" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_Teacher_Group" Association="Self.FK_Teacher_Teacher_Group">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UniversityDB_AdvancedModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="Course_ID" />
+          </Key>
+          <Property Name="Course_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Course_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Practical_Hours" Type="Int32" />
+          <Property Name="Theory_Hours" Type="Int32" />
+          <Property Name="Total_Hours" Type="Int32" Nullable="false" />
+          <Property Name="FK_Major_ID" Type="Int32" Nullable="false" />
+          <Property Name="Practical_Units" Type="Int32" />
+          <Property Name="Theory_Units" Type="Int32" />
+          <Property Name="Total_Units" Type="Int32" Nullable="false" />
+          <Property Name="FK_Prerequisite" Type="Int32" />
+          <NavigationProperty Name="Majors" Relationship="Self.FK_Courses_Courses_Majors" FromRole="Courses" ToRole="Majors" />
+          <NavigationProperty Name="Courses1" Relationship="Self.FK_Courses_Courses_Prerequisite" FromRole="Courses" ToRole="Courses1" />
+          <NavigationProperty Name="Courses2" Relationship="Self.FK_Courses_Courses_Prerequisite" FromRole="Courses1" ToRole="Courses" />
+          <NavigationProperty Name="CoursesTime" Relationship="Self.FK_CoursesTime_CoursesTime_Courses" FromRole="Courses" ToRole="CoursesTime" />
+        </EntityType>
+        <EntityType Name="CoursesTime">
+          <Key>
+            <PropertyRef Name="CourseTime_ID" />
+          </Key>
+          <Property Name="CourseTime_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_Course_ID" Type="Int32" Nullable="false" />
+          <Property Name="CourseDay" Type="Int32" Nullable="false" />
+          <Property Name="Start_Hour" Type="Int32" Nullable="false" />
+          <Property Name="End_Hour" Type="Int32" Nullable="false" />
+          <Property Name="FK_Term_ID" Type="Int32" Nullable="false" />
+          <Property Name="FK_Teacher_ID" Type="Int32" Nullable="false" />
+          <Property Name="FK_Major_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_CoursesTime_CoursesTime_Courses" FromRole="CoursesTime" ToRole="Courses" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_CoursesTime_CoursesTime_Teacher" FromRole="CoursesTime" ToRole="Teacher" />
+          <NavigationProperty Name="Term" Relationship="Self.FK_CoursesTime_CoursesTime_Term" FromRole="CoursesTime" ToRole="Term" />
+          <NavigationProperty Name="Majors" Relationship="Self.FK_CoursesTime_Majors" FromRole="CoursesTime" ToRole="Majors" />
+        </EntityType>
+        <EntityType Name="Groups">
+          <Key>
+            <PropertyRef Name="Group_ID" />
+          </Key>
+          <Property Name="Group_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Group_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Majors" Relationship="Self.FK_Majors_Majors_Group" FromRole="Groups" ToRole="Majors" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Teacher_Teacher_Group" FromRole="Groups" ToRole="Teacher" />
+        </EntityType>
+        <EntityType Name="Levels">
+          <Key>
+            <PropertyRef Name="Level_ID" />
+          </Key>
+          <Property Name="Level_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Level_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Majors" Relationship="Self.FK_Majors_Majors_Level" FromRole="Levels" ToRole="Majors" />
+        </EntityType>
+        <EntityType Name="Majors">
+          <Key>
+            <PropertyRef Name="Major_ID" />
+          </Key>
+          <Property Name="Major_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Major_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FK_Level_ID" Type="Int32" Nullable="false" />
+          <Property Name="FK_Group_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_Courses_Majors" FromRole="Majors" ToRole="Courses" />
+          <NavigationProperty Name="CoursesTime" Relationship="Self.FK_CoursesTime_Majors" FromRole="Majors" ToRole="CoursesTime" />
+          <NavigationProperty Name="Groups" Relationship="Self.FK_Majors_Majors_Group" FromRole="Majors" ToRole="Groups" />
+          <NavigationProperty Name="Levels" Relationship="Self.FK_Majors_Majors_Level" FromRole="Majors" ToRole="Levels" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="Teacher_Id" />
+          </Key>
+          <Property Name="Teacher_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Teacher_FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Teacher_LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FK_Teacher_Degree_ID" Type="Int32" Nullable="false" />
+          <Property Name="FK_Teacher_Group_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CoursesTime" Relationship="Self.FK_CoursesTime_CoursesTime_Teacher" FromRole="Teacher" ToRole="CoursesTime" />
+          <NavigationProperty Name="Groups" Relationship="Self.FK_Teacher_Teacher_Group" FromRole="Teacher" ToRole="Groups" />
+          <NavigationProperty Name="Teacher_Degree" Relationship="Self.FK_Teacher_Teacher_Degree" FromRole="Teacher" ToRole="Teacher_Degree" />
+        </EntityType>
+        <EntityType Name="Teacher_Degree">
+          <Key>
+            <PropertyRef Name="Degree_ID" />
+          </Key>
+          <Property Name="Degree_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Degree_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Teacher_Teacher_Degree" FromRole="Teacher_Degree" ToRole="Teacher" />
+        </EntityType>
+        <EntityType Name="Term">
+          <Key>
+            <PropertyRef Name="Term_ID" />
+          </Key>
+          <Property Name="Term_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Term_Name" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CoursesTime" Relationship="Self.FK_CoursesTime_CoursesTime_Term" FromRole="Term" ToRole="CoursesTime" />
+        </EntityType>
+        <Association Name="FK_Courses_Courses_Majors">
+          <End Role="Majors" Type="Self.Majors" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Majors">
+              <PropertyRef Name="Major_ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="FK_Major_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Courses_Courses_Prerequisite">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
+          <End Role="Courses1" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_ID" />
+            </Principal>
+            <Dependent Role="Courses1">
+              <PropertyRef Name="FK_Prerequisite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Course_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Teacher_Id" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Teacher_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_CoursesTime_Term">
+          <End Role="Term" Type="Self.Term" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Term">
+              <PropertyRef Name="Term_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Term_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CoursesTime_Majors">
+          <End Role="Majors" Type="Self.Majors" Multiplicity="1" />
+          <End Role="CoursesTime" Type="Self.CoursesTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Majors">
+              <PropertyRef Name="Major_ID" />
+            </Principal>
+            <Dependent Role="CoursesTime">
+              <PropertyRef Name="FK_Major_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Majors_Majors_Group">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Majors" Type="Self.Majors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="Group_ID" />
+            </Principal>
+            <Dependent Role="Majors">
+              <PropertyRef Name="FK_Group_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_Teacher_Group">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="Group_ID" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="FK_Teacher_Group_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Majors_Majors_Level">
+          <End Role="Levels" Type="Self.Levels" Multiplicity="1" />
+          <End Role="Majors" Type="Self.Majors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Levels">
+              <PropertyRef Name="Level_ID" />
+            </Principal>
+            <Dependent Role="Majors">
+              <PropertyRef Name="FK_Level_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teacher_Teacher_Degree">
+          <End Role="Teacher_Degree" Type="Self.Teacher_Degree" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher_Degree">
+              <PropertyRef Name="Degree_ID" />
+            </Principal>
+            <Dependent Role="Teacher">
+              <PropertyRef Name="FK_Teacher_Degree_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UniversityDB_AdvancedEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Courses" EntityType="Self.Courses" />
+          <EntitySet Name="CoursesTime" EntityType="Self.CoursesTime" />
+          <EntitySet Name="Groups" EntityType="Self.Groups" />
+          <EntitySet Name="Levels" EntityType="Self.Levels" />
+          <EntitySet Name="Majors" EntityType="Self.Majors" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" />
+          <EntitySet Name="Teacher_Degree" EntityType="Self.Teacher_Degree" />
+          <EntitySet Name="Term" EntityType="Self.Term" />
+          <AssociationSet Name="FK_Courses_Courses_Majors" Association="Self.FK_Courses_Courses_Majors">
+            <End Role="Majors" EntitySet="Majors" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Courses_Courses_Prerequisite" Association="Self.FK_Courses_Courses_Prerequisite">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Courses1" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Courses" Association="Self.FK_CoursesTime_CoursesTime_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Teacher" Association="Self.FK_CoursesTime_CoursesTime_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_CoursesTime_Term" Association="Self.FK_CoursesTime_CoursesTime_Term">
+            <End Role="Term" EntitySet="Term" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CoursesTime_Majors" Association="Self.FK_CoursesTime_Majors">
+            <End Role="Majors" EntitySet="Majors" />
+            <End Role="CoursesTime" EntitySet="CoursesTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Majors_Majors_Group" Association="Self.FK_Majors_Majors_Group">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Majors" EntitySet="Majors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_Teacher_Group" Association="Self.FK_Teacher_Teacher_Group">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Majors_Majors_Level" Association="Self.FK_Majors_Majors_Level">
+            <End Role="Levels" EntitySet="Levels" />
+            <End Role="Majors" EntitySet="Majors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teacher_Teacher_Degree" Association="Self.FK_Teacher_Teacher_Degree">
+            <End Role="Teacher_Degree" EntitySet="Teacher_Degree" />
+            <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UniversityDB_AdvancedModelStoreContainer" CdmEntityContainer="UniversityDB_AdvancedEntities">
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Courses">
+              <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="Course_ID" ColumnName="Course_ID" />
+                <ScalarProperty Name="Course_Name" ColumnName="Course_Name" />
+                <ScalarProperty Name="Practical_Hours" ColumnName="Practical_Hours" />
+                <ScalarProperty Name="Theory_Hours" ColumnName="Theory_Hours" />
+                <ScalarProperty Name="Total_Hours" ColumnName="Total_Hours" />
+                <ScalarProperty Name="FK_Major_ID" ColumnName="FK_Major_ID" />
+                <ScalarProperty Name="Practical_Units" ColumnName="Practical_Units" />
+                <ScalarProperty Name="Theory_Units" ColumnName="Theory_Units" />
+                <ScalarProperty Name="Total_Units" ColumnName="Total_Units" />
+                <ScalarProperty Name="FK_Prerequisite" ColumnName="FK_Prerequisite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoursesTime">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.CoursesTime">
+              <MappingFragment StoreEntitySet="CoursesTime">
+                <ScalarProperty Name="CourseTime_ID" ColumnName="CourseTime_ID" />
+                <ScalarProperty Name="FK_Course_ID" ColumnName="FK_Course_ID" />
+                <ScalarProperty Name="CourseDay" ColumnName="CourseDay" />
+                <ScalarProperty Name="Start_Hour" ColumnName="Start_Hour" />
+                <ScalarProperty Name="End_Hour" ColumnName="End_Hour" />
+                <ScalarProperty Name="FK_Term_ID" ColumnName="FK_Term_ID" />
+                <ScalarProperty Name="FK_Teacher_ID" ColumnName="FK_Teacher_ID" />
+                <ScalarProperty Name="FK_Major_ID" ColumnName="FK_Major_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Groups">
+              <MappingFragment StoreEntitySet="Groups">
+                <ScalarProperty Name="Group_ID" ColumnName="Group_ID" />
+                <ScalarProperty Name="Group_Name" ColumnName="Group_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Levels">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Levels">
+              <MappingFragment StoreEntitySet="Levels">
+                <ScalarProperty Name="Level_ID" ColumnName="Level_ID" />
+                <ScalarProperty Name="Level_Name" ColumnName="Level_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Majors">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Majors">
+              <MappingFragment StoreEntitySet="Majors">
+                <ScalarProperty Name="Major_ID" ColumnName="Major_ID" />
+                <ScalarProperty Name="Major_Name" ColumnName="Major_Name" />
+                <ScalarProperty Name="FK_Level_ID" ColumnName="FK_Level_ID" />
+                <ScalarProperty Name="FK_Group_ID" ColumnName="FK_Group_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teacher">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="Teacher_Id" ColumnName="Teacher_Id" />
+                <ScalarProperty Name="Teacher_FirstName" ColumnName="Teacher_FirstName" />
+                <ScalarProperty Name="Teacher_LastName" ColumnName="Teacher_LastName" />
+                <ScalarProperty Name="FK_Teacher_Degree_ID" ColumnName="FK_Teacher_Degree_ID" />
+                <ScalarProperty Name="FK_Teacher_Group_ID" ColumnName="FK_Teacher_Group_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teacher_Degree">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Teacher_Degree">
+              <MappingFragment StoreEntitySet="Teacher_Degree">
+                <ScalarProperty Name="Degree_ID" ColumnName="Degree_ID" />
+                <ScalarProperty Name="Degree_Name" ColumnName="Degree_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Term">
+            <EntityTypeMapping TypeName="UniversityDB_AdvancedModel.Term">
+              <MappingFragment StoreEntitySet="Term">
+                <ScalarProperty Name="Term_ID" ColumnName="Term_ID" />
+                <ScalarProperty Name="Term_Name" ColumnName="Term_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

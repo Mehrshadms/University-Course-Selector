@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="174202b6112942a1956b134f9724839f" Name="Diagram1">
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Courses" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.CoursesTime" Width="1.5" PointX="8.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Groups" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Levels" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Majors" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Teacher" Width="1.5" PointX="6" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Teacher_Degree" Width="1.5" PointX="3.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniversityDB_AdvancedModel.Term" Width="1.5" PointX="6" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Courses_Courses_Majors" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Courses_Courses_Prerequisite" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_CoursesTime_CoursesTime_Courses" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_CoursesTime_CoursesTime_Teacher" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_CoursesTime_CoursesTime_Term" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_CoursesTime_Majors" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Majors_Majors_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Teacher_Teacher_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Majors_Majors_Level" ManuallyRouted="false" />
+        <AssociationConnector Association="UniversityDB_AdvancedModel.FK_Teacher_Teacher_Degree" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
